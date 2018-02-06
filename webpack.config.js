@@ -15,10 +15,11 @@ module.exports = {
         path: path.resolve(__dirname, "dist"),
         filename: '[name].bundle.js'
     },
+    devtool: 'source-maps',
     module: {
         rules: [
             {
-                test: /\.scss$/, 
+                test: /\.scss$/,
                 use: ExtractTextPlugin.extract({
                     fallback: 'style-loader',
                     use: ['css-loader','sass-loader'],
@@ -27,7 +28,16 @@ module.exports = {
             },
             {
                 test: /\.js$/,
-                exclude: /node_modules/,
+                include: [
+                    path.resolve(__dirname, "src")
+
+                    // Note: Experiment -- rebabel all victory
+                    // path.resolve(__dirname, "node_modules/victory"),
+                    // path.resolve(__dirname, "node_modules/victory-chart"),
+                    // path.resolve(__dirname, "node_modules/victory-core"),
+                    // path.resolve(__dirname, "node_modules/victory-pie")
+                ],
+                //exclude: /node_modules/,
                 use: 'babel-loader'
             },
             {
@@ -75,7 +85,8 @@ module.exports = {
         new webpack.optimize.UglifyJsPlugin({
           compress: {
             warnings: false
-          }
+          },
+          sourceMap: true
         })
     ]
 }
